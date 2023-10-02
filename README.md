@@ -8,6 +8,7 @@ AutoDataFlow is a web application designed to simplify data analysis tasks & sav
 - **Intuitive Interface:** Our user-friendly interface makes it easy to upload and manage your datasets.
 - **Data Summary:** Quickly get insights into your data with summary statistics, data visualization, and more.
 - **Missing Data Handling:** Easily handle missing data by dropping or filling values, including statistical methods.
+- **Display Plot:** Easily handle visulize data by Various Plots.
 - **Export Results:** Download your cleaned and transformed data with a click.
 
 
