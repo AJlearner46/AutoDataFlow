@@ -15,7 +15,8 @@ st.set_page_config(
     layout = "wide",
     initial_sidebar_state = "expanded",
     menu_items = {
-        'About': "# This is a header. This is an *extremely* cool app!"
+        'About': "# This is a header. This is an *extremely* cool app! Build By-Ayush Rupapara",
+        
     }
 )
 
@@ -24,7 +25,7 @@ st.sidebar.title("Data Analysis Web App")
 # -------------------------------------------[web app features]------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 file_format_type = ["csv"]
-functions = ["Overview", "Drop Columns", "Drop Categorical Rows", "Rename Columns", "Display Plot", "Handling Missing Data"]
+functions = ["Overview", "Drop Columns", "Drop Categorical Rows", "Rename Columns", "Display Plot", "Handling Missing Data", "Outliers"]
 
 # -------------------------------------[Helper Functions]------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -79,6 +80,26 @@ def handling_missing_values(data, option_type, dict_value=None):
     
     return data
 
+def outliers(data, num_category_outliers):
+        plt.figure(figsize=(6,2))
+        flierprops = dict(marker='o', markerfacecolor='purple', markersize=6,
+                    linestyle='none', markeredgecolor='black')
+    
+        path_list = []
+        for i in range(len(num_category_outliers)):
+        
+            column = num_category_outliers[i]
+            plt.xlim(min(data[column]), max(data[column])) 
+            plt.title("Checking Outliers for {} Column".format(column))
+            plot = sns.boxplot(x=column, flierprops=flierprops, data=data)
+            fig = plot.get_figure()
+
+            path = '{}.png'.format(i)
+            fig.savefig(path)
+            path_list.append(path)
+
+        return path_list
+
 # --------------------------------------------------[upload data]-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 uploaded_file = st.sidebar.file_uploader("Upload Your File", type = file_format_type)
@@ -87,7 +108,6 @@ if uploaded_file is not None:
 
     file_type = uploaded_file.type.split("/")[1]
 
-    
     data = data(uploaded_file, file_type)
 
     describe, shape, columns, num_category, str_category, null_values, dtypes, unique, str_category, column_with_null_values = describe(data)
@@ -255,4 +275,13 @@ if uploaded_file is not None:
                 st.session_state.missing_dict = {}
 
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    
+    if "Outliers" in multi_function_selector:
 
+        outliers_selection = st.multiselect("Enter or select Name of the columns to see Outliers:", num_category)
+        outliers = outliers(data, outliers_selection)
+        
+        for i in range(len(outliers)):
+            st.image(outliers[i])
+
+# -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
